@@ -37,55 +37,63 @@ export default function ContactClient({ contacts: initialContacts }) {
     const handleEdit = (contact) => setForm(contact);
 
     return (
-        <div className="p-6">
-            <div className="flex items-center justify-center min-h-screen bg-gray-100">
-                <div className="bg-white p-6 rounded shadow-md w-full max-w-md">
-                    <h1 className="text-2xl font-bold mb-4 text-center">Contact Us</h1>
-                    <form onSubmit={handleSubmit} className="space-y-4 mb-6">
-                        <input
-                            type="text"
-                            placeholder="Name"
-                            value={form.name}
-                            onChange={(e) => setForm({ ...form, name: e.target.value })}
-                            className="border p-2 w-full"
-                        />
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            value={form.email}
-                            onChange={(e) => setForm({ ...form, email: e.target.value })}
-                            className="border p-2 w-full"
-                        />
-                        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded w-full">
-                            {form.id ? 'Update' : 'Add'} Contact
-                        </button>
-                    </form>
+        <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center p-4">
+            <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-8">
+                <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">📬 Contact Us</h1>
+
+                {/* Form Section */}
+                <form onSubmit={handleSubmit} className="space-y-5">
+                    <input
+                        type="text"
+                        placeholder="Your Name"
+                        value={form.name}
+                        onChange={(e) => setForm({ ...form, name: e.target.value })}
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    />
+                    <input
+                        type="email"
+                        placeholder="Your Email"
+                        value={form.email}
+                        onChange={(e) => setForm({ ...form, email: e.target.value })}
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    />
+                    <button
+                        type="submit"
+                        className="w-full bg-blue-600 hover:bg-blue-700 transition duration-200 text-white py-3 rounded-lg font-semibold"
+                    >
+                        {form.id ? 'Update Contact' : 'Add Contact'}
+                    </button>
+                </form>
+
+                {/* Contact List Section */}
+                <div className="mt-10">
+                    <h2 className="text-xl font-semibold text-gray-700 mb-4">📇 Contact List</h2>
+                    <ul className="space-y-3">
+                        {contacts.map((c) => (
+                            <li key={c.id} className="bg-gray-50 p-4 rounded-lg shadow flex justify-between items-center">
+                                <div>
+                                    <p className="text-lg font-medium text-gray-800">{c.name}</p>
+                                    <p className="text-sm text-gray-600">{c.email}</p>
+                                </div>
+                                <div className="space-x-2">
+                                    <button
+                                        onClick={() => handleEdit(c)}
+                                        className="bg-yellow-400 hover:bg-yellow-500 text-black px-3 py-1 rounded transition"
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(c.id)}
+                                        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </div>
-            <ul className="space-y-2">
-                {contacts.map((c) => (
-                    <li key={c.id} className="border p-4 flex justify-between items-center">
-                        <div>
-                            <p><strong>{c.name}</strong></p>
-                            <p>{c.email}</p>
-                        </div>
-                        <div className="space-x-2">
-                            <button
-                                onClick={() => handleEdit(c)}
-                                className="bg-yellow-400 text-black px-2 py-1 rounded"
-                            >
-                                Edit
-                            </button>
-                            <button
-                                onClick={() => handleDelete(c.id)}
-                                className="bg-red-500 text-white px-2 py-1 rounded"
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    </li>
-                ))}
-            </ul>
         </div>
     );
 }
