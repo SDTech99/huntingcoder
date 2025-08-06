@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 export default function ContactClient({ contacts: initialContacts }) {
     const [contacts, setContacts] = useState(initialContacts);
@@ -14,23 +15,39 @@ export default function ContactClient({ contacts: initialContacts }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!form.name || !form.email)
-            return alert('Name and Email are required');
+            return toast.error('Name and Email are required');
         const method = form.id ? 'PUT' : 'POST';
-        await fetch('/api/contact', {
+        const result = await fetch('/api/contact', {
             method,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(form),
         });
+        if (!result.ok) {
+            const error = await result.json();
+            return toast.error(error.error || 'Something went wrong');
+        }   
+        if (method === 'POST') {
+            toast.success('Contact added successfully!');   
+            
+        } else {
+            toast.success('Contact updated successfully!');
+        }
         setForm({ name: '', email: '', id: null });
         fetchContacts();
     };
 
     const handleDelete = async (id) => {
-        await fetch('/api/contact', {
+        const result = await fetch('/api/contact', {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id }),
         });
+        if (!result.ok) {
+            const error = await result.json();
+            return toast.error(error.error || 'Something went wrong');
+        } else {
+            toast.success('Contact deleted successfully!');
+        }   
         fetchContacts();
     };
 
